@@ -404,8 +404,7 @@
             <a href="#contact">Contact</a>
 
             {% if user.is_authenticated %}
-                <span class="welcome-text">Welcome, {{ user.username }}</span>
-                <a href="{% url 'logout' %}" class="download-btn">Logout</a>
+<span class="welcome-text">Welcome, {{ user.email|cut:"@gmail.com" }}</span>                <a href="{% url 'logout' %}" class="download-btn">Logout</a>
             {% else %}
                 <a href="/oidc/authenticate/" class="download-btn">Login</a>
                 <a href="{% url 'register' %}" class="download-btn">Register</a>

@@ -13,10 +13,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 
+from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 # SECURITY
 SECRET_KEY = 'django-insecure-1o-y@=dn^3brcx6x2=flr#9xphgl!_45c4dw(os_ugofj1q#!e'
 DEBUG = True
@@ -123,8 +124,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Replace these with your actual Keycloak values
 KEYCLOAK_SERVER_URL = 'http://localhost:8080'
 KEYCLOAK_REALM = 'sso-demo'
-OIDC_RP_CLIENT_ID = 'app3-bank-client'
-OIDC_RP_CLIENT_SECRET = 'SzeHrS8nGa3Ra1W8WC2QE2aueeX0OD2V'
+OIDC_RP_CLIENT_ID = os.getenv('KEYCLOAK_CLIENT_ID', 'app3-bank-client')
+OIDC_RP_CLIENT_SECRET = os.getenv('KEYCLOAK_CLIENT_SECRET', '')
 
 OIDC_OP_AUTHORIZATION_ENDPOINT = f'{KEYCLOAK_SERVER_URL}/realms/{KEYCLOAK_REALM}/protocol/openid-connect/auth'
 OIDC_OP_TOKEN_ENDPOINT = f'{KEYCLOAK_SERVER_URL}/realms/{KEYCLOAK_REALM}/protocol/openid-connect/token'
@@ -136,7 +137,7 @@ OIDC_RP_SIGN_ALGO = 'RS256'
 OIDC_CREATE_USER = True
 OIDC_STORE_ACCESS_TOKEN = True
 OIDC_STORE_ID_TOKEN = True
-OIDC_RP_SCOPES = 'openid email profile'
+OIDC_RP_SCOPES = os.getenv('KEYCLOAK_SCOPE', 'openid profile email')
 
 AUTHENTICATION_BACKENDS = (
     'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
