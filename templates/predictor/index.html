@@ -98,6 +98,7 @@
             display: flex;
             align-items: center;
             gap: 22px;
+            flex-wrap: wrap;
         }
 
         .nav-links a {
@@ -123,6 +124,12 @@
 
         .download-btn:hover {
             color: white !important;
+        }
+
+        .welcome-text {
+            font-size: 14px;
+            color: #dbeafe;
+            font-weight: 600;
         }
 
         main {
@@ -323,6 +330,28 @@
             font-size: 15px;
         }
 
+        .auth-message {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 18px;
+            padding: 22px 18px;
+            margin-top: 10px;
+        }
+
+        .auth-message p {
+            color: #dbeafe;
+            margin-bottom: 16px;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .auth-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
         footer {
             position: relative;
             z-index: 2;
@@ -369,11 +398,18 @@
     <header>
         <div class="logo">📈 Bank Term Deposit Predict</div>
         <nav class="nav-links">
-            <a href="#">Home</a>
+            <a href="/">Home</a>
             <a href="#about">About</a>
             <a href="#predictions">Predictions</a>
             <a href="#contact">Contact</a>
-            <a href="#" class="download-btn">Get Started</a>
+
+            {% if user.is_authenticated %}
+                <span class="welcome-text">Welcome, {{ user.username }}</span>
+                <a href="{% url 'logout' %}" class="download-btn">Logout</a>
+            {% else %}
+                <a href="/oidc/authenticate/" class="download-btn">Login</a>
+                <a href="{% url 'register' %}" class="download-btn">Register</a>
+            {% endif %}
         </nav>
     </header>
 
@@ -386,23 +422,39 @@
                     Welcome to the Term Deposit Prediction App. Upload your CSV file and generate smart predictions instantly with a smooth, modern, and reliable workflow.
                 </p>
 
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'predict' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-                    <div class="upload-box">
-                        <div class="upload-icon">📊</div>
-                        <div class="upload-text">
-                            Choose a CSV file to generate predictions and download the processed output.
+                        <div class="upload-box">
+                            <div class="upload-icon">📊</div>
+                            <div class="upload-text">
+                                Choose a CSV file to generate predictions and download the processed output.
+                            </div>
+                            <input type="file" name="csv_file" accept=".csv" required>
                         </div>
-                        <input type="file" name="csv_file" accept=".csv" required>
+
+                        <button type="submit" class="btn">Download Predictions</button>
+                    </form>
+
+                    <div class="note">
+                        Only .csv files are accepted. Please make sure the file structure matches the trained model input format.
+                    </div>
+                {% else %}
+                    <div class="auth-message">
+                        <p>
+                            Please log in to access the prediction feature and download prediction results.
+                        </p>
+                        <div class="auth-actions">
+                            <a href="/oidc/authenticate/" class="download-btn">Login</a>
+                            <a href="{% url 'register' %}" class="download-btn">Register</a>
+                        </div>
                     </div>
 
-                    <button type="submit" class="btn">Download Predictions</button>
-                </form>
-
-                <div class="note">
-                    Only .csv files are accepted. Please make sure the file structure matches the trained model input format.
-                </div>
+                    <div class="note">
+                        You can explore the project information below, but prediction access is available only after login.
+                    </div>
+                {% endif %}
 
                 <div class="features">
                     <div class="feature-card">⚡ Fast Processing</div>
