@@ -334,7 +334,7 @@ Recommended environment variables:
 
 Siva Prasad
 
-GitHub: https://github.com/Friendlysiva143/
+GitHub: https://github.com/sivaprasadkandena/
 
 **License**
 

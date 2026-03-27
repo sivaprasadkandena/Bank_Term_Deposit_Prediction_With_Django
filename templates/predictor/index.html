@@ -403,10 +403,13 @@
             <a href="#predictions">Predictions</a>
             <a href="#contact">Contact</a>
 
-            {% if user.is_authenticated %}
-<span class="welcome-text">Welcome, {{ user.email|cut:"@gmail.com" }}</span>                <a href="{% url 'logout' %}" class="download-btn">Logout</a>
+            {% if session_user %}
+                <span class="welcome-text">
+                    Welcome, {{ session_user.email|default:session_user.username|default:"User" }}
+                </span>
+                <a href="{% url 'logout' %}" class="download-btn">Logout</a>
             {% else %}
-                <a href="/oidc/authenticate/" class="download-btn">Login</a>
+                <a href="{% url 'login' %}" class="download-btn">Login</a>
                 <a href="{% url 'register' %}" class="download-btn">Register</a>
             {% endif %}
         </nav>
@@ -421,7 +424,7 @@
                     Welcome to the Term Deposit Prediction App. Upload your CSV file and generate smart predictions instantly with a smooth, modern, and reliable workflow.
                 </p>
 
-                {% if user.is_authenticated %}
+                {% if session_user %}
                     <form method="post" action="{% url 'predict' %}" enctype="multipart/form-data">
                         {% csrf_token %}
 
@@ -445,7 +448,7 @@
                             Please log in to access the prediction feature and download prediction results.
                         </p>
                         <div class="auth-actions">
-                            <a href="/oidc/authenticate/" class="download-btn">Login</a>
+                            <a href="{% url 'login' %}" class="download-btn">Login</a>
                             <a href="{% url 'register' %}" class="download-btn">Register</a>
                         </div>
                     </div>
