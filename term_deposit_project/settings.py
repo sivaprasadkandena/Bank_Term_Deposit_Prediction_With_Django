@@ -91,10 +91,10 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -104,8 +104,9 @@ SESSION_SAVE_EVERY_REQUEST = True
 SESSION_COOKIE_NAME = 'bank_term_sessionid'
 CSRF_COOKIE_NAME = 'bank_term_csrftoken'
 
-KEYCLOAK_SERVER_URL = 'http://localhost:8080'
-KEYCLOAK_REALM = 'sso-demo'
+KEYCLOAK_SERVER_URL = os.environ.get("KEYCLOAK_SERVER_URL", "http://127.0.0.1:8080")
+KEYCLOAK_REALM = os.environ.get("KEYCLOAK_REALM", "sso-demo")
+KEYCLOAK_LOGOUT_URL = f"{KEYCLOAK_SERVER_URL}/realms/{KEYCLOAK_REALM}/protocol/openid-connect/logout"
 
 KEYCLOAK_CLIENT_ID = os.getenv('KEYCLOAK_CLIENT_ID', 'app3-bank-client')
 KEYCLOAK_CLIENT_SECRET = os.getenv('KEYCLOAK_CLIENT_SECRET', '')
@@ -120,3 +121,5 @@ AUTHLIB_OAUTH_CLIENTS = {
         },
     }
 }
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
