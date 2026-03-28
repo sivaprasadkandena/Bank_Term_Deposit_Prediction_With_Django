@@ -123,3 +123,5 @@ AUTHLIB_OAUTH_CLIENTS = {
 }
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+CSRF_TRUSTED_ORIGINS = ['https://bank-term-deposit-prediction-with-django-yo3z.onrender.com']
