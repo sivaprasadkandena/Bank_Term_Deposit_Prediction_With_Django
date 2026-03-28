@@ -19,7 +19,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'bank-term-deposit-prediction-with-django.onrender.com',
+    'bank-term-deposit-prediction-with-django-yo3z.onrender.com',
 ]
 
 INSTALLED_APPS = [
